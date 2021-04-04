@@ -10,7 +10,7 @@ def generate_trie(ip_lines, router_size):
     legal = set()
 
     print("generating")
-    generate_time = time.time()
+    generate_time = time.time_ns()
 
     for index in range(0, len(ip_lines), len(ip_lines) // router_size + 1):
         ip_line = ip_lines[index]
@@ -35,15 +35,15 @@ def generate_trie(ip_lines, router_size):
         legal_end = legal_start + (1 << (32 - count))
         for i in range(legal_start, min(legal_end, legal_start + 10)):
             legal.add(i)
-    print("! generate time: " + str(time.time() - generate_time))
-    return ip_trie, end, legal
+    print("! generate time: " + str(time.time_ns() - generate_time))
+    return ip_trie, end, legal, time.time_ns() - generate_time
 
 
 def ip_test(length, trie, end, legal):
     list_legal = list(legal)
-    test_time = time.time()
+    test_time = time.time_ns()
     for j in range(0, length):
-        ip_index = random.randint(0, len(list_legal))
+        ip_index = random.randint(0, len(list_legal) - 1)
         ip = list_legal[ip_index]
         (cur, ans) = (1, 0)
         for i in range(0, 32):
@@ -54,5 +54,6 @@ def ip_test(length, trie, end, legal):
             if end[cur] != "":
                 ans = cur
         # print(end[ans], end="")
-    print("! test time: " + str(time.time() - test_time))
+    print("! test time: " + str(time.time_ns() - test_time))
+    return time.time_ns() - test_time
 
